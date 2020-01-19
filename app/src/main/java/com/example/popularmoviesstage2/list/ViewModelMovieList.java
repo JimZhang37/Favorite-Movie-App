@@ -20,7 +20,7 @@ public class ViewModelMovieList extends ViewModel {
 
     LiveData<ArrayList<Movie>> dataTopRated;
 
-    //TODO(1 async call to repository's )
+    //TODO(1) async call to repository's 
     public void initValue(){
         repository.getValue();
     }
