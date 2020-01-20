@@ -15,4 +15,8 @@ public class Movie {
     String mUserRating;
     @Json(name = "release_date")
     String mReleaseDate;
+
+    public String getImage() {
+        return mImage;
+    }
 }

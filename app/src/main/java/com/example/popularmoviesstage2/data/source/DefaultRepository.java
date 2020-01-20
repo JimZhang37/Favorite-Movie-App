@@ -18,6 +18,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class DefaultRepository {
     private MutableLiveData<ArrayList<Movie>> topRated;
+    public DefaultRepository(){
+        topRated = new MutableLiveData<ArrayList<Movie>>();
+    }
 
     public LiveData<ArrayList<Movie>> getTopRated() {
         return this.topRated;
@@ -25,7 +28,8 @@ public class DefaultRepository {
 
     public Call<MovieList> getMovieListCall() {
         String MOVIE_BASE_URL = "https://api.themoviedb.org/3/movie/";
-        String API_KEY = "111";
+        String API_KEY = "758f975f610e3d276c8f2364e5052672";
+
 
         Moshi moshi = new Moshi.Builder()
                 .build();

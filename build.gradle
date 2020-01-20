@@ -13,8 +13,10 @@ buildscript {
         junit_version = '4.12'
         legacy_support_version = '1.0.0'
         lifecycle_version = "2.1.0"
+        material_version = "1.0.0"
         moshi_version = ''
         nav_version = "2.1.0"
+        picasso_version = "2.71828"
         recyclerview_version = '1.1.0'
         retrofit2_version = '2.7.1'
         runner_version = '1.2.0'

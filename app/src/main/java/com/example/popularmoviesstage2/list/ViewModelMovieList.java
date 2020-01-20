@@ -2,6 +2,7 @@ package com.example.popularmoviesstage2.list;
 
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.popularmoviesstage2.data.Movie;
@@ -16,11 +17,11 @@ public class ViewModelMovieList extends ViewModel {
         dataTopRated = this.repository.getTopRated();
     }
 
-    DefaultRepository repository;
+    private DefaultRepository repository;
 
-    LiveData<ArrayList<Movie>> dataTopRated;
+    public LiveData<ArrayList<Movie>> dataTopRated ;
 
-    //TODO(1) async call to repository's 
+    //TODO(1) async call to repository's
     public void initValue(){
         repository.getValue();
     }
