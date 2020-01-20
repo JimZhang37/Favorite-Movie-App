@@ -19,6 +19,7 @@ import com.example.popularmoviesstage2.data.Movie;
 import com.example.popularmoviesstage2.databinding.FragmentMovieListBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,9 +63,9 @@ public class FragmentMovieList extends Fragment {
     }
 
     private void registerLivedataObserver() {
-        viewModelMovieList.dataTopRated.observe(this, new Observer<ArrayList<Movie>>() {
+        viewModelMovieList.dataTopRated.observe(this, new Observer<List<Movie>>() {
             @Override
-            public void onChanged(ArrayList<Movie> movies) {
+            public void onChanged(List<Movie> movies) {
                 adapter.updateData(movies);
             }
         });

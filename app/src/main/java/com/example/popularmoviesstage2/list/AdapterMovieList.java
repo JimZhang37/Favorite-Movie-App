@@ -15,8 +15,8 @@ import java.util.List;
 
 public class AdapterMovieList extends RecyclerView.Adapter<ImageViewHolder> {
 
-    private ArrayList<Movie> movieList;
-    public void updateData(ArrayList<Movie> movies){
+    private List<Movie> movieList;
+    public void updateData(List<Movie> movies){
         movieList = movies;
         notifyDataSetChanged();
     }

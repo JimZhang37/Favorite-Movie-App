@@ -12,12 +12,15 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp">
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_movie_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
         </ScrollView>
 
         <com.google.android.material.appbar.AppBarLayout
@@ -36,6 +39,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.popularmoviesstage2.list.ViewModelMovieList" />
