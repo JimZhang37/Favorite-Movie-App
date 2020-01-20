@@ -62,6 +62,9 @@ public class FragmentMovieList extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     *
+     */
     private void registerLivedataObserver() {
         viewModelMovieList.dataTopRated.observe(this, new Observer<List<Movie>>() {
             @Override
@@ -70,6 +73,8 @@ public class FragmentMovieList extends Fragment {
             }
         });
     }
+
+
 
 
 }

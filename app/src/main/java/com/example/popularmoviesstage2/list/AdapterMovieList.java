@@ -31,7 +31,7 @@ public class AdapterMovieList extends RecyclerView.Adapter<ImageViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        String path = "http://image.tmdb.org/t/p/w185/" + movieList.get(position).getImage();
+        String path = "http://image.tmdb.org/t/p/w500/" + movieList.get(position).getImage();
         holder.updateWithUrl(path);
     }
 

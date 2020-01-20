@@ -29,7 +29,7 @@ public class DefaultRepository {
 
     public Call<MovieList> getMovieListCall() {
         String MOVIE_BASE_URL = "https://api.themoviedb.org/3/movie/";
-        String API_KEY = "000";
+        String API_KEY = "758f975f610e3d276c8f2364e5052672";
 
 
         Moshi moshi = new Moshi.Builder()
@@ -39,7 +39,7 @@ public class DefaultRepository {
                 .Builder()
                 .baseUrl(MOVIE_BASE_URL)
                 .addConverterFactory
-                        (MoshiConverterFactory.create())
+                        (MoshiConverterFactory.create(moshi))
                 .build();
 
         MovieApiService api = retrofit.create(MovieApiService.class);

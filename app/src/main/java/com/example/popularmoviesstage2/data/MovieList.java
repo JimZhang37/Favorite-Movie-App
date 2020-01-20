@@ -2,7 +2,6 @@ package com.example.popularmoviesstage2.data;
 
 import com.squareup.moshi.Json;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieList {
