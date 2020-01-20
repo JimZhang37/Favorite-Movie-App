@@ -28,7 +28,7 @@ public class DefaultRepository {
 
     public Call<MovieList> getMovieListCall() {
         String MOVIE_BASE_URL = "https://api.themoviedb.org/3/movie/";
-        String API_KEY = "758f975f610e3d276c8f2364e5052672";
+        String API_KEY = "mmm";
 
 
         Moshi moshi = new Moshi.Builder()
