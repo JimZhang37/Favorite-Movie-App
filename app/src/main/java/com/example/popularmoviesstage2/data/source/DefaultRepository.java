@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.popularmoviesstage2.data.Movie;
 import com.example.popularmoviesstage2.data.MovieList;
 import com.example.popularmoviesstage2.data.source.Remote.MovieApiService;
+import com.example.popularmoviesstage2.data.source.local.MovieDatabase;
 import com.squareup.moshi.Moshi;
 
 import java.util.ArrayList;
@@ -18,9 +19,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class DefaultRepository {
-    private MutableLiveData<List<Movie>> topRated;
-    public DefaultRepository(){
-        topRated = new MutableLiveData<List<Movie>>();
+    private LiveData<List<Movie>> topRated;
+    private MovieDatabase database;
+    public DefaultRepository(MovieDatabase db){
+        this.database = db;
+
+        topRated = database.movieDao().loadAllMovies();
     }
 
     public LiveData<List<Movie>> getTopRated() {
@@ -29,7 +33,7 @@ public class DefaultRepository {
 
     public Call<MovieList> getMovieListCall() {
         String MOVIE_BASE_URL = "https://api.themoviedb.org/3/movie/";
-        String API_KEY = "758f975f610e3d276c8f2364e5052672";
+        String API_KEY = "aaa";
 
 
         Moshi moshi = new Moshi.Builder()
@@ -56,7 +60,9 @@ public class DefaultRepository {
                              @Override
                              public void onResponse(Call<MovieList> call, Response<MovieList> response) {
                                  MovieList movieList = response.body();
-                                 topRated.setValue(movieList.getMovies());
+                                 List<Movie> list = movieList.getMovies();
+                                 list.forEach(movie -> database.movieDao().insertMovie(movie));
+//                                 topRated.setValue(movieList.getMovies());
                              }
 
                              @Override
