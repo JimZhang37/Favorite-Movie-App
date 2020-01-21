@@ -3,7 +3,6 @@ package com.example.popularmoviesstage2.data.source;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.popularmoviesstage2.data.Movie;
 import com.example.popularmoviesstage2.data.MovieList;
@@ -12,7 +11,6 @@ import com.example.popularmoviesstage2.data.source.local.MovieDao;
 import com.example.popularmoviesstage2.data.source.local.MovieDatabase;
 import com.squareup.moshi.Moshi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,9 +32,9 @@ public class DefaultRepository {
         return this.topRated;
     }
 
-    public Call<MovieList> getMovieListCall() {
+    private Call<MovieList> getTopRatedMovieListCall() {
         String MOVIE_BASE_URL = "https://api.themoviedb.org/3/movie/";
-        String API_KEY = "758f975f610e3d276c8f2364e5052672";
+        String API_KEY = "aaa";
 
 
         Moshi moshi = new Moshi.Builder()
@@ -57,7 +55,7 @@ public class DefaultRepository {
     }
 
     public void getValue() {
-        getMovieListCall()
+        getTopRatedMovieListCall()
                 .enqueue(new Callback<MovieList>() {
 
                              @Override

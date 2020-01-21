@@ -2,14 +2,23 @@ package com.example.popularmoviesstage2.list;
 
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -33,6 +42,7 @@ public class FragmentMovieList extends Fragment {
     public FragmentMovieList() {
         // Required empty public constructor
     }
+
 
 
     @Override
@@ -59,6 +69,11 @@ public class FragmentMovieList extends Fragment {
         registerLivedataObserver();
         //download data from remote source.
         viewModelMovieList.initValue();
+
+        Toolbar toolbar = (Toolbar) container.findViewById(R.id.toolbar);
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
         return binding.getRoot();
     }
 
@@ -74,7 +89,44 @@ public class FragmentMovieList extends Fragment {
         });
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.list_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        Log.d("menu item ID is ", String.valueOf(itemId));
+        switch (itemId) {
+            /*         * When you click the reset menu item, we want to start all over
+             * and display the pretty gradient again. There are a few similar
+             * ways of doing this, with this one being the simplest of those
+             * ways. (in our humble opinion)*/
+            case R.id.popular_test:
+//                tx.setText("Popular Movie");
+////                mRV.setAdapter(mAdapter);
+//                model.setData(1);
 
 
+                return true;
+            case R.id.top_rated_test:
+//                tx.setText("Top Rated Movie");
+////                mRV.setAdapter(mAdapter);
+//                model.setData(2);
 
+
+                return true;
+            case R.id.favorite_test:
+//                Class destinationActivity = FavoriteMovieActivity.class;
+//                Intent intent = new Intent(TestActivity.this, destinationActivity);
+//
+//                startActivity(intent);
+//                mRV.setAdapter(mAdapterFavorite);
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);//TODO why return?
+    }
 }
