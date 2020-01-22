@@ -20,7 +20,7 @@ public class ViewModelMovieDetail extends ViewModel {
         mMovieID = movieID;
         mMovie = repository.loadMovieByID(mMovieID);
         mReviews = repository.loadAllReviewsByMovieID(mMovieID);
-//        mTrailers = repository.getTrailersByID(mMovieID);
+        mTrailers = repository.loadAllTrailersByMovieID(mMovieID);
         repository.loadMovieReviewAndTrailerByID(mMovieID);
 
     }
@@ -31,5 +31,9 @@ public class ViewModelMovieDetail extends ViewModel {
 
     public LiveData<List<Review>> getReviews(){
         return mReviews;
+    }
+
+    public LiveData<List<Trailer>> getTrailers(){
+        return mTrailers;
     }
 }

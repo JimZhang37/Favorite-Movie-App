@@ -6,20 +6,21 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.popularmoviesstage2.data.Review;
+
+import com.example.popularmoviesstage2.data.Trailer;
 
 import java.util.List;
 
 @Dao
-public interface ReviewDao {
-    @Query("SELECT * FROM reviews WHERE movie_id =:movieID")
-    LiveData<List<Review>> loadAllReviewsByMovieID(String movieID);
+public interface TrailerDao {
+    @Query("SELECT * FROM trailers WHERE movie_id =:movieID")
+    LiveData<List<Trailer>> loadAllTrailersByMovieID(String movieID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertReveiw(Review review);
+    void insertTrailer(Trailer trailer);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAllReviews(List<Review> reviews);
+    void insertAllTrailers(List<Trailer> trailers);
 
 
 

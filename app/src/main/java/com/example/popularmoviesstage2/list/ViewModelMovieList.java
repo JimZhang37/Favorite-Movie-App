@@ -14,11 +14,13 @@ public class ViewModelMovieList extends ViewModel {
     ViewModelMovieList(DefaultRepository repository) {
         this.repository = repository;
         dataTopRated = this.repository.getTopRated();
+        dataPopular = this.repository.getPopular();
     }
 
     private DefaultRepository repository;
 
     public LiveData<List<Movie>> dataTopRated ;
+    public LiveData<List<Movie>> dataPopular ;
 
     //TODO(1) async call to repository's
     public void initValue(){

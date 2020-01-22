@@ -18,6 +18,7 @@ import com.example.popularmoviesstage2.MovieApplication;
 import com.example.popularmoviesstage2.R;
 import com.example.popularmoviesstage2.data.Movie;
 import com.example.popularmoviesstage2.data.Review;
+import com.example.popularmoviesstage2.data.Trailer;
 import com.example.popularmoviesstage2.databinding.FragmentMovieDetailBinding;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public class FragmentMoveDetail extends Fragment {
     private FragmentMovieDetailBinding binding;
     private ViewModelMovieDetail viewModelMovieDetail;
     private AdapterReviewList adapterReviewList;
+    private AdapterTrailerList adapterTrailerList;
+
     public FragmentMoveDetail() {
         // Required empty public constructor
     }
@@ -41,7 +44,7 @@ public class FragmentMoveDetail extends Fragment {
 // Inflate the layout for this fragment
         String argument = getArguments().getString("movieID");
         //TODO(2): Create a ViewModel
-        ViewModelDetailFactory factory = new ViewModelDetailFactory(((MovieApplication) requireContext().getApplicationContext()).getRepository(),argument);
+        ViewModelDetailFactory factory = new ViewModelDetailFactory(((MovieApplication) requireContext().getApplicationContext()).getRepository(), argument);
         viewModelMovieDetail = ViewModelProviders.of(this, factory).get(ViewModelMovieDetail.class);
 
         binding = FragmentMovieDetailBinding.inflate(inflater, container, false);
@@ -53,11 +56,17 @@ public class FragmentMoveDetail extends Fragment {
         adapterReviewList = new AdapterReviewList();
         binding.recyclerReviewList.setAdapter(adapterReviewList);
 
+        binding.recyclerTrailerList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext());
+        binding.recyclerTrailerList.setLayoutManager(linearLayoutManager1);
+        adapterTrailerList = new AdapterTrailerList();
+        binding.recyclerTrailerList.setAdapter(adapterTrailerList);
+
         observeData();
         return binding.getRoot();
     }
 
-    private void observeData(){
+    private void observeData() {
         viewModelMovieDetail.getMovie().observe(this, new Observer<Movie>() {
             @Override
             public void onChanged(Movie movie) {
@@ -65,10 +74,17 @@ public class FragmentMoveDetail extends Fragment {
             }
         });
 
-        viewModelMovieDetail.getReviews().observe(this,new Observer<List<Review>>(){
+        viewModelMovieDetail.getReviews().observe(this, new Observer<List<Review>>() {
             @Override
             public void onChanged(List<Review> reviews) {
                 adapterReviewList.updateData(reviews);
+            }
+        });
+
+        viewModelMovieDetail.getTrailers().observe(this, new Observer<List<Trailer>>() {
+            @Override
+            public void onChanged(List<Trailer> trailers) {
+                adapterTrailerList.updateData(trailers);
             }
         });
     }
