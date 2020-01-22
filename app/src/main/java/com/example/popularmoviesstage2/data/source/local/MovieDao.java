@@ -56,5 +56,10 @@ public abstract class MovieDao {
 
     @Query("SELECT * FROM movies INNER JOIN movie_toprated ON movies.mMovieID = movie_toprated.mMovieID")
     public abstract LiveData<List<Movie>> observeMoviesTopRated();
+
+    @Query("SELECT * FROM movies INNER JOIN movie_favorite ON movies.mMovieID = movie_favorite.mMovieID")
+    public abstract LiveData<List<Movie>> observeMoviesFavorite();
+
+
 }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.popularmoviesstage2.data.Movie;
 import com.example.popularmoviesstage2.data.MovieList;
+import com.example.popularmoviesstage2.data.Movie_Favorite;
 import com.example.popularmoviesstage2.data.Review;
 import com.example.popularmoviesstage2.data.ReviewRemote;
 import com.example.popularmoviesstage2.data.ReviewRemoteList;
@@ -13,6 +14,8 @@ import com.example.popularmoviesstage2.data.Trailer;
 import com.example.popularmoviesstage2.data.TrailerRemote;
 import com.example.popularmoviesstage2.data.TrailerRemoteList;
 import com.example.popularmoviesstage2.data.source.Remote.MovieApiService;
+import com.example.popularmoviesstage2.data.source.async.DeleteFavoriteAsyncTask;
+import com.example.popularmoviesstage2.data.source.async.SaveFavoriteAsyncTask;
 import com.example.popularmoviesstage2.data.source.async.SaveMovieAsyncTask;
 import com.example.popularmoviesstage2.data.source.async.SaveReviewsAsyncTask;
 import com.example.popularmoviesstage2.data.source.async.SaveTrailersAsyncTask;
@@ -28,19 +31,20 @@ import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class DefaultRepository {
-//    private LiveData<List<Movie>> topRated;
+    //    private LiveData<List<Movie>> topRated;
     private MovieDatabase database;
     private MovieApiService api;
-    private String API_KEY = "zzzz";
+    private String API_KEY = "xxxxxxxxxx";
 
     private LiveData<List<Movie>> topRated;
     private LiveData<List<Movie>> popular;
-
+    private LiveData<List<Movie>> favorite;
     public DefaultRepository(MovieDatabase db) {
         this.database = db;
 
         topRated = database.movieDao().observeMoviesTopRated();
         popular = database.movieDao().observeMoviesPopular();
+        favorite = database.movieDao().observeMoviesFavorite();
 
         String MOVIE_BASE_URL = "https://api.themoviedb.org/3/movie/";
 
@@ -59,12 +63,17 @@ public class DefaultRepository {
     }
 
     public LiveData<List<Movie>> getTopRated() {
-        return topRated;
+        return database.movieDao().observeMoviesTopRated();
     }
 
     public LiveData<List<Movie>> getPopular() {
         return popular;
     }
+
+    public LiveData<List<Movie>> getFavorite() {
+        return favorite;
+    }
+
     public void loadMovies() {
         Call<MovieList> movieTopRatedList = api.getTopRatedMoviesAsync(API_KEY);
         movieTopRatedList
@@ -152,6 +161,18 @@ public class DefaultRepository {
 
             }
         });
+    }
+
+    public void saveFavorite(Movie_Favorite movie) {
+        new SaveFavoriteAsyncTask(database.favoriteDao(), movie).execute();
+    }
+
+    public void deleteFavorite(Movie_Favorite movie) {
+        new DeleteFavoriteAsyncTask(database.favoriteDao(),movie).execute();
+    }
+
+    public LiveData<Movie_Favorite> queryFavorite(String movieId) {
+        return database.favoriteDao().queryFavorite(movieId);
     }
 
 

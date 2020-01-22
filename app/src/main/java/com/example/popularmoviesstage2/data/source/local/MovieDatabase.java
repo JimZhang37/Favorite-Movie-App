@@ -36,8 +36,11 @@ public abstract class MovieDatabase extends RoomDatabase {
     }
 
     public abstract MovieDao movieDao();
+
     public abstract ReviewDao reviewDao();
+
     public abstract TrailerDao trailerDao();
 
+    public abstract FavoriteDao favoriteDao();
 
 }

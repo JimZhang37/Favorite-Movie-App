@@ -1,6 +1,7 @@
 package com.example.popularmoviesstage2.detail;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -16,15 +17,24 @@ public class AdapterTrailerList extends RecyclerView.Adapter<AdapterTrailerList.
 
     private List<Trailer> mTrailers;
 
+    private ListItemClickListener mListener;
+
+    public AdapterTrailerList(ListItemClickListener mListener) {
+        this.mListener = mListener;
+    }
+
     public void updateData(List<Trailer> trailers){
         mTrailers = trailers;
         notifyDataSetChanged();
     }
-
+    public interface ListItemClickListener {
+        void onListItemClick(String key);
+    }
     @Override
     public void onBindViewHolder(@NonNull ViewHolderTrailer holder, int position) {
-        String content = mTrailers.get(position).getKey();
-        holder.bind(content);
+        String key = mTrailers.get(position).getKey();
+        String title = mTrailers.get(position).getName();
+        holder.bind(key,title);
     }
 
 
@@ -49,8 +59,16 @@ public class AdapterTrailerList extends RecyclerView.Adapter<AdapterTrailerList.
             textView = itemView;
         }
 
-        public void bind(String content){
-            textView.setText(content);
+        public void bind(String key, String title){
+            textView.setText(title);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onListItemClick(key);
+                }
+            });
         }
+
+
     }
 }

@@ -39,6 +39,7 @@ import java.util.List;
  */
 public class FragmentMovieList extends Fragment implements AdapterMovieList.ListItemClickListener {
     private String SharedPreferenceKey = "movie_type";
+    static private int dataUpdate = 0;
     FragmentMovieListBinding binding;
     ViewModelMovieList viewModelMovieList;
     AdapterMovieList adapter;
@@ -74,7 +75,7 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
 //        registerLivedataObserver();
         setAdapter(fetchPreference());
         //download data from remote source.
-        viewModelMovieList.initValue();
+//        viewModelMovieList.initValue();
 
         setHasOptionsMenu(true);
 //        toolbar = container.findViewById(R.id.toolbar);
@@ -84,79 +85,6 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
     }
 
 
-
-    //
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        toolbar.inflateMenu(R.menu.list_menu);
-//    }
-//
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        menuListener = new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                int itemId = item.getItemId();
-//                Log.d("menu item ID is ", String.valueOf(itemId));
-//                switch (itemId) {
-//                    /*         * When you click the reset menu item, we want to start all over
-//                     * and display the pretty gradient again. There are a few similar
-//                     * ways of doing this, with this one being the simplest of those
-//                     * ways. (in our humble opinion)*/
-//                    case R.id.popular_test:
-////                tx.setText("Popular Movie");
-//////                mRV.setAdapter(mAdapter);
-////                model.setData(1);
-//
-//
-//                        return true;
-//                    case R.id.top_rated_test:
-////                tx.setText("Top Rated Movie");
-//////                mRV.setAdapter(mAdapter);
-////                model.setData(2);
-//
-//
-//                        return true;
-//                    case R.id.favorite_test:
-////                Class destinationActivity = FavoriteMovieActivity.class;
-////                Intent intent = new Intent(TestActivity.this, destinationActivity);
-////
-////                startActivity(intent);
-////                mRV.setAdapter(mAdapterFavorite);
-//
-//                        return true;
-//                }
-//                return false;
-//            }
-//
-//        };
-//    }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        toolbar.setOnMenuItemClickListener(menuListener);
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        toolbar.setOnMenuItemClickListener(null);
-//    }
-
-    /**
-     *
-     */
-    private void registerLivedataObserver() {
-        viewModelMovieList.dataTopRated.observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(List<Movie> movies) {
-                adapter.updateData(movies);
-            }
-        });
-    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -183,7 +111,10 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
                 return setAdapter(2);
 
             case R.id.favorite_test:
-
+                savePreference(3);
+                return setAdapter(3);
+            case R.id.update_data:
+                viewModelMovieList.initValue();
                 return true;
         }
         return super.onOptionsItemSelected(item);//TODO why return?
@@ -192,13 +123,16 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
     private boolean setAdapter(int movieType) {
         viewModelMovieList.dataPopular.removeObservers(this);
         viewModelMovieList.dataTopRated.removeObservers(this);
+        viewModelMovieList.dataFavorite.removeObservers(this);
 
         switch (movieType) {
             case 1:
                 viewModelMovieList.dataPopular.observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
+                        updateDateTimes();
                         adapter.updateData(movies);
+                        getActivity().setTitle("Popular");
                     }
                 });
                 return true;
@@ -206,11 +140,21 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
                 viewModelMovieList.dataTopRated.observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
+                        updateDateTimes();
                         adapter.updateData(movies);
+                        getActivity().setTitle("Top Rated");
                     }
                 });
                 return true;
             case 3:
+                viewModelMovieList.dataFavorite.observe(this, new Observer<List<Movie>>() {
+                    @Override
+                    public void onChanged(List<Movie> movies) {
+                        updateDateTimes();
+                        adapter.updateData(movies);
+                        getActivity().setTitle("Favorite");
+                    }
+                });
                 return true;
             default:
                 return false;
@@ -219,18 +163,18 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
     }
 
     private void savePreference(int movieType) {
-        Log.d( "before save Preference", "ii is:" + movieType);
+        Log.d("before save Preference", "ii is:" + movieType);
         SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
         editor.putInt(SharedPreferenceKey, movieType);
         editor.apply();
         int i = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(SharedPreferenceKey, 1);
-        Log.d( "Saved Preference", "ii is:" + i);
+        Log.d("Saved Preference", "ii is:" + i);
         switch (movieType) {
             case 1:
-                Toast.makeText(getActivity(),"Popular Movie", Toast.LENGTH_LONG);
+                Toast.makeText(getActivity(), "Popular Movie", Toast.LENGTH_LONG);
                 return;
             case 2:
-                Toast.makeText(getActivity(),"Top Rated Movie", Toast.LENGTH_LONG);
+                Toast.makeText(getActivity(), "Top Rated Movie", Toast.LENGTH_LONG);
 
                 return;
             default:
@@ -239,9 +183,9 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
         }
     }
 
-    private int fetchPreference(){
+    private int fetchPreference() {
         int i = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(SharedPreferenceKey, 1);
-        if (i >3 || i < 1){
+        if (i > 3 || i < 1) {
             i = 1;
             SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
             editor.putInt(SharedPreferenceKey, i);
@@ -249,6 +193,12 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
         }
         Log.d("Preference is", "i is:" + i);
         return i;
+    }
+
+    private void updateDateTimes() {
+        dataUpdate++;
+        Log.d("the times of data update is ", ":" + dataUpdate);
+        Toast.makeText(getContext(), "the times of data update is: " + dataUpdate, Toast.LENGTH_SHORT);
     }
 
     @Override

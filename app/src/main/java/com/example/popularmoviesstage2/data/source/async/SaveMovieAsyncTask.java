@@ -20,6 +20,7 @@ public class SaveMovieAsyncTask extends AsyncTask<Void, Void, Void> {
         mMovieType = type;
     }
 
+    //TODO how to insert data ? I need to insert data once.
     @Override
     protected Void doInBackground(Void... voids) {
         switch (mMovieType){
