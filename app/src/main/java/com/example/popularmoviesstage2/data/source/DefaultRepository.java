@@ -1,13 +1,17 @@
 package com.example.popularmoviesstage2.data.source;
 
-import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.popularmoviesstage2.data.Movie;
 import com.example.popularmoviesstage2.data.MovieList;
+import com.example.popularmoviesstage2.data.Review;
+import com.example.popularmoviesstage2.data.ReviewRemote;
+import com.example.popularmoviesstage2.data.ReviewRemoteList;
 import com.example.popularmoviesstage2.data.source.Remote.MovieApiService;
-import com.example.popularmoviesstage2.data.source.local.MovieDao;
+import com.example.popularmoviesstage2.data.source.async.SaveMovieAsyncTask;
+import com.example.popularmoviesstage2.data.source.async.SaveReviewsAsyncTask;
 import com.example.popularmoviesstage2.data.source.local.MovieDatabase;
 import com.squareup.moshi.Moshi;
 
@@ -22,19 +26,14 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 public class DefaultRepository {
     private LiveData<List<Movie>> topRated;
     private MovieDatabase database;
-    public DefaultRepository(MovieDatabase db){
+    private MovieApiService api;
+    private String API_KEY = "758f975f610e3d276c8f2364e5052672";
+
+    public DefaultRepository(MovieDatabase db) {
         this.database = db;
 
         topRated = database.movieDao().loadAllMovies();
-    }
-
-    public LiveData<List<Movie>> getTopRated() {
-        return this.topRated;
-    }
-
-    private Call<MovieList> getTopRatedMovieListCall() {
         String MOVIE_BASE_URL = "https://api.themoviedb.org/3/movie/";
-        String API_KEY = "aaa";
 
 
         Moshi moshi = new Moshi.Builder()
@@ -47,15 +46,17 @@ public class DefaultRepository {
                         (MoshiConverterFactory.create(moshi))
                 .build();
 
-        MovieApiService api = retrofit.create(MovieApiService.class);
-
-        Call<MovieList> movieList = api.getTopRatedMoviesAsync(API_KEY);
-
-        return movieList;
+        api = retrofit.create(MovieApiService.class);
     }
 
-    public void getValue() {
-        getTopRatedMovieListCall()
+    public LiveData<List<Movie>> getTopRated() {
+        return this.topRated;
+    }
+
+
+    public void loadMovies() {
+        Call<MovieList> movieList = api.getTopRatedMoviesAsync(API_KEY);
+        movieList
                 .enqueue(new Callback<MovieList>() {
 
                              @Override
@@ -76,19 +77,34 @@ public class DefaultRepository {
 
     }
 
-    private static class SaveMovieAsyncTask extends AsyncTask<Void, Void, Void>{
-        private List<Movie> movieList;
-        private MovieDao movieDao;
-        public SaveMovieAsyncTask(List<Movie> list, MovieDao dao) {
-            movieList = list;
-            movieDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            movieDao.insertAllMovies(movieList);
-            return null;
-        }
+    public LiveData<Movie> loadMovieByID(String id) {
+        return database.movieDao().loadMovieByID(id);
     }
+
+    public LiveData<List<Review>> loadAllReviewsByMovieID(String id) {
+        return database.reviewDao().loadAllReviewsByMovieID(id);
+
+    }
+//    public Trailer getTrailersByID(String id){
+//
+//    }
+
+    public void loadMovieReviewAndTrailerByID(String mMovieID) {
+        api.getMovieReviewsAsync(mMovieID,API_KEY).enqueue(new Callback<ReviewRemoteList>() {
+            @Override
+            public void onResponse(Call<ReviewRemoteList> call, Response<ReviewRemoteList> response) {
+                Log.d("123456", "review");
+                ReviewRemoteList reviewRemoteList = response.body();
+                List<ReviewRemote> reviewRemotes = reviewRemoteList.getReviewRemote();
+                new SaveReviewsAsyncTask(reviewRemotes, database.reviewDao(),mMovieID).execute();
+            }
+
+            @Override
+            public void onFailure(Call<ReviewRemoteList> call, Throwable t) {
+
+            }
+        });
+    }
+
 
 }

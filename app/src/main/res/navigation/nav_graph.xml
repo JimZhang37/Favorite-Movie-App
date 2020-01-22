@@ -18,5 +18,9 @@
         android:id="@+id/fragmentMoveDetail"
         android:name="com.example.popularmoviesstage2.detail.FragmentMoveDetail"
         android:label="ragment_move_detail"
-        tools:layout="@layout/fragment_movie_detail" />
+        tools:layout="@layout/fragment_movie_detail" >
+        <argument
+            android:name="movieID"
+            app:argType="string" />
+    </fragment>
 </navigation>

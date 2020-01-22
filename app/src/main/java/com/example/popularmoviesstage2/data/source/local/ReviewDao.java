@@ -1,31 +1,27 @@
 package com.example.popularmoviesstage2.data.source.local;
 
-
 import androidx.lifecycle.LiveData;
-import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import com.example.popularmoviesstage2.data.Movie;
 
-import java.util.ArrayList;
+import com.example.popularmoviesstage2.data.Movie;
+import com.example.popularmoviesstage2.data.Review;
+
 import java.util.List;
 
-
 @Dao
-public interface MovieDao {
-    @Query("SELECT * FROM movies")
-    LiveData<List<Movie>> loadAllMovies();
+public interface ReviewDao {
+    @Query("SELECT * FROM reviews WHERE movie_id =:movieID")
+    LiveData<List<Review>> loadAllReviewsByMovieID(String movieID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMovie(Movie movie);
+    void insertReveiw(Review review);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAllMovies(List<Movie> movies);
+    void insertAllReviews(List<Review> reviews);
 
-    @Query("SELECT * FROM movies WHERE mMovieID = :movieId")
-    LiveData<Movie> loadMovieByID(String movieId);
+
 
 }
-

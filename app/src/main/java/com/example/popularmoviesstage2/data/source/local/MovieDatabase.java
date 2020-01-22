@@ -8,8 +8,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.popularmoviesstage2.data.Movie;
+import com.example.popularmoviesstage2.data.Review;
 
-@Database(entities = {Movie.class}, version = 1, exportSchema = false)
+@Database(entities = {Movie.class, Review.class}, version = 2, exportSchema = false)
 public abstract class MovieDatabase extends RoomDatabase {
 
     private static final String LOG_TAG = MovieDatabase.class.getSimpleName();
@@ -31,6 +32,7 @@ public abstract class MovieDatabase extends RoomDatabase {
     }
 
     public abstract MovieDao movieDao();
+    public abstract ReviewDao reviewDao();
 
 
 }

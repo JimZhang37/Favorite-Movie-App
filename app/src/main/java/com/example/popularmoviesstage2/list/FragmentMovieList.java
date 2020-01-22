@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.util.Log;
@@ -33,16 +34,17 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentMovieList extends Fragment {
+public class FragmentMovieList extends Fragment implements AdapterMovieList.ListItemClickListener {
 
     FragmentMovieListBinding binding;
     ViewModelMovieList viewModelMovieList;
     AdapterMovieList adapter;
+//    private Toolbar toolbar;
+//    private Toolbar.OnMenuItemClickListener menuListener;
 
     public FragmentMovieList() {
         // Required empty public constructor
     }
-
 
 
     @Override
@@ -62,7 +64,7 @@ public class FragmentMovieList extends Fragment {
         binding.recyclerMovieList.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         binding.recyclerMovieList.setLayoutManager(layoutManager);
-        adapter = new AdapterMovieList();
+        adapter = new AdapterMovieList(this);
         binding.recyclerMovieList.setAdapter(adapter);
 
         // register livedata observer
@@ -70,12 +72,72 @@ public class FragmentMovieList extends Fragment {
         //download data from remote source.
         viewModelMovieList.initValue();
 
-        Toolbar toolbar = (Toolbar) container.findViewById(R.id.toolbar);
+        setHasOptionsMenu(true);
+//        toolbar = container.findViewById(R.id.toolbar);
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         return binding.getRoot();
     }
+//
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        toolbar.inflateMenu(R.menu.list_menu);
+//    }
+//
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        menuListener = new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                int itemId = item.getItemId();
+//                Log.d("menu item ID is ", String.valueOf(itemId));
+//                switch (itemId) {
+//                    /*         * When you click the reset menu item, we want to start all over
+//                     * and display the pretty gradient again. There are a few similar
+//                     * ways of doing this, with this one being the simplest of those
+//                     * ways. (in our humble opinion)*/
+//                    case R.id.popular_test:
+////                tx.setText("Popular Movie");
+//////                mRV.setAdapter(mAdapter);
+////                model.setData(1);
+//
+//
+//                        return true;
+//                    case R.id.top_rated_test:
+////                tx.setText("Top Rated Movie");
+//////                mRV.setAdapter(mAdapter);
+////                model.setData(2);
+//
+//
+//                        return true;
+//                    case R.id.favorite_test:
+////                Class destinationActivity = FavoriteMovieActivity.class;
+////                Intent intent = new Intent(TestActivity.this, destinationActivity);
+////
+////                startActivity(intent);
+////                mRV.setAdapter(mAdapterFavorite);
+//
+//                        return true;
+//                }
+//                return false;
+//            }
+//
+//        };
+//    }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        toolbar.setOnMenuItemClickListener(menuListener);
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        toolbar.setOnMenuItemClickListener(null);
+//    }
 
     /**
      *
@@ -92,7 +154,7 @@ public class FragmentMovieList extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.list_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+//        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -128,5 +190,14 @@ public class FragmentMovieList extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);//TODO why return?
+    }
+
+
+
+    @Override
+    public void onListItemClick(View v, String movieId) {
+        Log.d("ABC", "onListItemClick");
+        FragmentMovieListDirections.ActionFragmentMovieListToFragmentMoveDetail action = FragmentMovieListDirections.actionFragmentMovieListToFragmentMoveDetail(movieId);
+        Navigation.findNavController(v).navigate(action);
     }
 }
