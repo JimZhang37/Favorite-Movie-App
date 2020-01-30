@@ -18,7 +18,7 @@ import java.util.List;
 
 public class AdapterMovieList extends RecyclerView.Adapter<AdapterMovieList.ImageViewHolder> {
     interface ListItemClickListener {
-        void onListItemClick(View v, String movieId);
+        void onListItemClick(View v, String movieId, String movieName);
     }
 
     public AdapterMovieList(ListItemClickListener listener) {
@@ -45,7 +45,7 @@ public class AdapterMovieList extends RecyclerView.Adapter<AdapterMovieList.Imag
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         String path = "http://image.tmdb.org/t/p/w500/" + movieList.get(position).getImage();
 //        holder.updateWithUrl(path);
-        holder.bind(path,mLisnter,movieList.get(position).getMovieID());
+        holder.bind(path,mLisnter,movieList.get(position).getMovieID(), movieList.get(position).getTitle());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class AdapterMovieList extends RecyclerView.Adapter<AdapterMovieList.Imag
 //                    .into(mMoviePoster);
 //        }
 
-        public void bind(String url, ListItemClickListener listener, String movieId) {
+        public void bind(String url, ListItemClickListener listener, String movieId, String movieName) {
             Picasso
                     .get()
                     .load(url)
@@ -84,7 +84,7 @@ public class AdapterMovieList extends RecyclerView.Adapter<AdapterMovieList.Imag
             mMoviePoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onListItemClick(v,movieId);
+                    listener.onListItemClick(v,movieId, movieName);
                 }
             } );
 

@@ -1,7 +1,6 @@
 package com.example.popularmoviesstage2.list;
 
 
-
 import android.content.Context;
 
 import android.content.SharedPreferences;
@@ -9,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -42,6 +43,7 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
     FragmentMovieListBinding binding;
     ViewModelMovieList viewModelMovieList;
     AdapterMovieList adapter;
+    ActionBar ab;
 //    private Toolbar toolbar;
 //    private Toolbar.OnMenuItemClickListener menuListener;
 
@@ -72,19 +74,22 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
 
         // register livedata observer
 //        registerLivedataObserver();
-        setAdapter(fetchPreference());
+
         //download data from remote source.
 //        viewModelMovieList.initValue();
         //TODO Add action bar
-//        Toolbar toolbar = binding.toolbar;
-//        getActivity().get
+        Toolbar toolbar = binding.toolbar;
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        int movieType = fetchPreference();
+        setTitle(movieType);
+        setAdapter(movieType);
         setHasOptionsMenu(true);
 //        toolbar = container.findViewById(R.id.toolbar);
 
 
         return binding.getRoot();
     }
-
 
 
     @Override
@@ -133,7 +138,8 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
                     public void onChanged(List<Movie> movies) {
                         updateDateTimes();
                         adapter.updateData(movies);
-                        getActivity().setTitle("Popular");
+                        setTitle(1);
+//                        getActivity().setTitle("Popular");
                     }
                 });
                 return true;
@@ -143,7 +149,8 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
                     public void onChanged(List<Movie> movies) {
                         updateDateTimes();
                         adapter.updateData(movies);
-                        getActivity().setTitle("Top Rated");
+                        setTitle(2);
+//                        getActivity().setTitle("Top Rated");
                     }
                 });
                 return true;
@@ -153,7 +160,8 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
                     public void onChanged(List<Movie> movies) {
                         updateDateTimes();
                         adapter.updateData(movies);
-                        getActivity().setTitle("Favorite");
+                        setTitle(3);
+//                        getActivity().setTitle("Favorite");
                     }
                 });
                 return true;
@@ -203,9 +211,28 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
     }
 
     @Override
-    public void onListItemClick(View v, String movieId) {
+    public void onListItemClick(View v, String movieId, String movieName) {
         Log.d("ABC", "onListItemClick");
-        FragmentMovieListDirections.ActionFragmentMovieListToFragmentMoveDetail action = FragmentMovieListDirections.actionFragmentMovieListToFragmentMoveDetail(movieId);
+//        FragmentMovieListDirections.ActionFragmentMovieListToFragmentMoveDetail action1 = FragmentMovieListDirections.actionFragmentMovieListToFragmentMoveDetail()
+
+        FragmentMovieListDirections.ActionFragmentMovieListToFragmentMoveDetail action = FragmentMovieListDirections.actionFragmentMovieListToFragmentMoveDetail(movieId,movieName);
         Navigation.findNavController(v).navigate(action);
+    }
+
+    private void setTitle(int titleID) {
+
+        switch (titleID) {
+            case 1:
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Popular");
+                return;
+            case 2:
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Top Rated");
+                return;
+            case 3:
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Favorite");
+                return;
+            default:
+                return;
+        }
     }
 }

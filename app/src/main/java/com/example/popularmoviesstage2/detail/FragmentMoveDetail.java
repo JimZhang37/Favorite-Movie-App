@@ -1,12 +1,14 @@
 package com.example.popularmoviesstage2.detail;
 
 
-import android.app.ActionBar;
+import androidx.appcompat.app.ActionBar;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -38,7 +40,7 @@ public class FragmentMoveDetail extends Fragment implements AdapterTrailerList.L
     private ViewModelMovieDetail viewModelMovieDetail;
     private AdapterReviewList adapterReviewList;
     private AdapterTrailerList adapterTrailerList;
-
+    private ActionBar ab;
     public FragmentMoveDetail() {
         // Required empty public constructor
     }
@@ -50,6 +52,7 @@ public class FragmentMoveDetail extends Fragment implements AdapterTrailerList.L
         // Inflate the layout for this fragment
 // Inflate the layout for this fragment
         String argument = getArguments().getString("movieID");
+        String movieName = getArguments().getString("movieName");
         //TODO(2): Create a ViewModel
         ViewModelDetailFactory factory = new ViewModelDetailFactory(((MovieApplication) requireContext().getApplicationContext()).getRepository(), argument);
         viewModelMovieDetail = ViewModelProviders.of(this, factory).get(ViewModelMovieDetail.class);
@@ -82,6 +85,12 @@ public class FragmentMoveDetail extends Fragment implements AdapterTrailerList.L
                 }
             }
         });
+
+
+        Toolbar toolbar = binding.detailToolbar;
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ab.setTitle(movieName);
         setupNavigationUp();
         return binding.getRoot();
     }
@@ -93,6 +102,7 @@ public class FragmentMoveDetail extends Fragment implements AdapterTrailerList.L
                 binding.setMovie(movie);
                 String url = "http://image.tmdb.org/t/p/w500/" + movie.getImage();
                 Picasso.get().load(url).into(binding.imageDetail);
+                ab.setTitle(movie.getTitle());
             }
 
         });
@@ -125,10 +135,13 @@ public class FragmentMoveDetail extends Fragment implements AdapterTrailerList.L
         });
     }
 
+    /**
+     * TODO(it's not working )
+     */
     private void setupNavigationUp(){
-//        ActionBar ab = getActivity().getActionBar();
-//        ab.setDisplayHomeAsUpEnabled(true);
-//        ab.setDisplayShowHomeEnabled(true);
+
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
     }
 
     @Override

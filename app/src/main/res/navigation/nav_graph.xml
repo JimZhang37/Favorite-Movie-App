@@ -22,5 +22,9 @@
         <argument
             android:name="movieID"
             app:argType="string" />
+        <argument
+            android:name="movieName"
+            app:argType="string"
+             />
     </fragment>
 </navigation>
