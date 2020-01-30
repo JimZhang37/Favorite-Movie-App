@@ -34,7 +34,7 @@ public class DefaultRepository {
     //    private LiveData<List<Movie>> topRated;
     private MovieDatabase database;
     private MovieApiService api;
-    private String API_KEY = "xxxxxxxxxx";
+    private String API_KEY = "758f975f610e3d276c8f2364e5052672";
 
     private LiveData<List<Movie>> topRated;
     private LiveData<List<Movie>> popular;

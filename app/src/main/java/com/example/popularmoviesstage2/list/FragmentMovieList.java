@@ -1,15 +1,14 @@
 package com.example.popularmoviesstage2.list;
 
 
-import android.app.Application;
+
 import android.content.Context;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -31,7 +30,7 @@ import com.example.popularmoviesstage2.R;
 import com.example.popularmoviesstage2.data.Movie;
 import com.example.popularmoviesstage2.databinding.FragmentMovieListBinding;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 /**
@@ -76,7 +75,9 @@ public class FragmentMovieList extends Fragment implements AdapterMovieList.List
         setAdapter(fetchPreference());
         //download data from remote source.
 //        viewModelMovieList.initValue();
-
+        //TODO Add action bar
+//        Toolbar toolbar = binding.toolbar;
+//        getActivity().get
         setHasOptionsMenu(true);
 //        toolbar = container.findViewById(R.id.toolbar);
 
