@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.ImageView;
 
 import com.example.popularmoviesstage2.MovieApplication;
 import com.example.popularmoviesstage2.R;
@@ -91,6 +92,8 @@ public class FragmentMoveDetail extends Fragment implements AdapterTrailerList.L
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         ab.setTitle(movieName);
+
+
         setupNavigationUp();
         return binding.getRoot();
     }
@@ -102,6 +105,7 @@ public class FragmentMoveDetail extends Fragment implements AdapterTrailerList.L
                 binding.setMovie(movie);
                 String url = "http://image.tmdb.org/t/p/w500/" + movie.getImage();
                 Picasso.get().load(url).into(binding.imageDetail);
+                Picasso.get().load(url).into(binding.imageAppbar);
                 ab.setTitle(movie.getTitle());
             }
 
