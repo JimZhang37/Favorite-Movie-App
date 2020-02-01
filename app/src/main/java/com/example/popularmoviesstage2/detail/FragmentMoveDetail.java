@@ -90,11 +90,17 @@ public class FragmentMoveDetail extends Fragment implements AdapterTrailerList.L
 
         Toolbar toolbar = binding.detailToolbar;
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         ab.setTitle(movieName);
+        ab.setDisplayHomeAsUpEnabled(true);
 
 
-        setupNavigationUp();
         return binding.getRoot();
     }
 
@@ -139,14 +145,7 @@ public class FragmentMoveDetail extends Fragment implements AdapterTrailerList.L
         });
     }
 
-    /**
-     * TODO(it's not working )
-     */
-    private void setupNavigationUp(){
 
-        ab.setDisplayHomeAsUpEnabled(true);
-        ab.setDisplayShowHomeEnabled(true);
-    }
 
     @Override
     public void onListItemClick(String key) {
